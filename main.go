@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"gh-fuzzy-search/gh"
+	"os"
 )
 
 const usageMessage = `Usage gh-fuzzy-search [arguments]
@@ -22,7 +22,18 @@ func userCommand(args []string) {
 		os.Exit(0)
 	}
 
-	fmt.Println("user: " + args[1])
+	username := args[1]
+
+	fmt.Println("Searching for repos of " + username)
+
+	repos, err := gh.GetRepos(username)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(repos)
 }
 
 func checkArgs(args []string) {
@@ -43,11 +54,9 @@ func checkArgs(args []string) {
 		printColoredText(versionMessage, ColorWhite)
 		os.Exit(0)
 	case "-u", "--user":
-		gh.CheckGithubTokenFromEnv()
 		userCommand(args)
 		os.Exit(0)
 	case "-r", "--repo":
-		gh.CheckGithubTokenFromEnv()
 		// TODO: Implement this
 		printColoredText("repo", ColorWhite)
 		os.Exit(0)
