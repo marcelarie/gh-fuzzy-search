@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"gh-fuzzy-search/gh"
 )
 
 const usageMessage = `Usage gh-fuzzy-search [arguments]
@@ -24,15 +25,6 @@ func userCommand(args []string) {
 	fmt.Println("user: " + args[1])
 }
 
-func checkGithubTokenFromEnv() {
-	ghToken := os.Getenv("GITHUB_TOKEN")
-	if ghToken == "" {
-		fmt.Println("Error: You must set GITHUB_TOKEN environment variable")
-		fmt.Println("See https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line")
-		os.Exit(0)
-	}
-}
-
 func checkArgs(args []string) {
 	if len(args) == 0 {
 		printColoredText("Error: You must pass at least one argument", ColorRed)
@@ -51,11 +43,11 @@ func checkArgs(args []string) {
 		printColoredText(versionMessage, ColorWhite)
 		os.Exit(0)
 	case "-u", "--user":
-		checkGithubTokenFromEnv()
+		gh.CheckGithubTokenFromEnv()
 		userCommand(args)
 		os.Exit(0)
 	case "-r", "--repo":
-		checkGithubTokenFromEnv()
+		gh.CheckGithubTokenFromEnv()
 		// TODO: Implement this
 		printColoredText("repo", ColorWhite)
 		os.Exit(0)
