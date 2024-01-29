@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"gh-fuzzy-search/gh"
 	"os"
+	"strings"
 )
 
 const usageMessage = `Usage gh-fuzzy-search [arguments]
@@ -16,11 +18,30 @@ func printColoredText(text string, color Color) {
 	fmt.Println(string(color) + text + "\033[0m")
 }
 
+func readUsername() string {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Println("Enter search string (Ctrl+C to exit)")
+		fmt.Print(">> ")
+		search, _ := reader.ReadString('\n')
+		search = strings.TrimSpace(search) // remove newline character
+
+		usernames, err := gh.GetUsers(search)
+		if err != nil {
+			fmt.Println("Error:", err)
+			continue
+		}
+
+		fmt.Println("Usernames:", usernames)
+	}
+}
+
 func userCommand(args []string) {
 	if len(args) == 1 {
-		fmt.Println("Error: You must pass at least a GitHub username")
-		fmt.Println("Example: gh-fuzzy-search -u <username>")
-		os.Exit(0)
+		// fmt.Println("Error: You must pass at least a GitHub username")
+		// fmt.Println("Example: gh-fuzzy-search -u <username>")
+		// os.Exit(0)
+		readUsername()
 	}
 
 	username := args[1]
