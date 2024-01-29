@@ -9,6 +9,7 @@ import (
 const usageMessage = `Usage gh-fuzzy-search [arguments]
 Arguments:
   -h, --help: Show this help message
+  -u, --user: Search for a GitHub user
   -v, --version: Show the version of this program`
 
 func printColoredText(text string, color Color) {
@@ -24,16 +25,17 @@ func userCommand(args []string) {
 
 	username := args[1]
 
-	fmt.Println("Searching for repos of " + username)
-
-	repos, err := gh.GetRepos(username)
+	// repos, err := gh.GetRepos(username)
+	users, err := gh.GetUsers(username)
 
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(repos)
+	for _, user := range users {
+		fmt.Println(user)
+	}
 }
 
 func checkArgs(args []string) {
